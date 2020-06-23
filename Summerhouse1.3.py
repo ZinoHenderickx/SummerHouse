@@ -22,6 +22,11 @@ LED2 = LED(19, pin_factory=IP)
 LED3 = LED(6, pin_factory=IP)
 LED4 = LED(11, pin_factory=IP)
 
+#PWM
+
+PWMLED1 = PWMLED(4, True, 50, 100, pin_factory=IP)
+
+
 
 # BUTTONS
 AMOUNT_BUTTONS = 4
@@ -31,21 +36,21 @@ BUTTON3 = Button(12, pin_factory=IP)
 BUTTON4 = Button(23, pin_factory=IP)
 
 
-def all_leds_on():
+def turn_leds_on():
     LED1.on()
     LED2.on()
     LED3.on()
     LED4.on()
 
 
-def all_leds_off():
+def turn_leds_off():
     LED1.off()
     LED2.off()
     LED3.off()
     LED4.off()
 
 
-def all_leds_blink():
+def turn_leds_blink():
     LED1.blink()
     LED2.blink()
     LED3.blink()
@@ -55,10 +60,10 @@ def all_leds_blink():
 def button_1():
     while True:
         if BUTTON1.value == 1 and LED1.value == 0:
-            all_leds_on()
+            turn_leds_on()
             time.sleep(0.25)
         if BUTTON1.value == 1 and LED1.value == 1:
-            all_leds_off()
+            turn_leds_off()
             time.sleep(0.25)
 
 
@@ -74,32 +79,40 @@ def button_2():
             time.sleep(0.25)
 
 
+def button_3():
+    while True:
+        if BUTTON3.value == 1 and LED1.value == 0:
+            PWMLED.on()
+            time.sleep(0.25)
+
+
 def button_4():
     while True:
         if BUTTON4.value == 1 and LED1.value == 1:
-            time.sleep(5)
-            all_leds_off()
+            time.sleep(30)
+            turn_leds_off()
         if BUTTON4.value == 1 and LED2.value == 1:
-            time.sleep(5)
-            all_leds_off()
+            time.sleep(30)
+            turn_leds_off()
         if BUTTON4.value == 1 and LED3.value == 1:
-            time.sleep(5)
-            all_leds_off()
+            time.sleep(30)
+            turn_leds_off()
         if BUTTON4.value == 1 and LED4.value == 1:
-            time.sleep(5)
-            all_leds_off()
+            time.sleep(30)
+            turn_leds_off()
         if BUTTON4.value == 1 and LED1.value == 0:
-            all_leds_on()
+            turn_leds_on()
+            time.sleep(30)
+            turn_leds_blink()
             time.sleep(5)
-            all_leds_blink()
-            time.sleep(5)
-            all_leds_off()
+            turn_leds_off()
 
 
 if __name__ == "__main__":
     x1 = multiprocessing.Process(target=button_1)
     x2 = multiprocessing.Process(target=button_2)
-    x3 = multiprocessing.Process(target=button_4)
+    x3 = multiprocessing.Process(target=button_3)
+    x4 = multiprocessing.Process(target=button_4)
     x1.start()
     x2.start()
-    x3.start()
+    x4.start()
